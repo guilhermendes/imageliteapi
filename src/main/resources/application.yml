@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/imagelite
+    username: postgresql
+    password: postgresql
+  jpa:
+    database: POSTGRESQL
+    hibernate:
+        dll-auto: update
+    show-sql: true
