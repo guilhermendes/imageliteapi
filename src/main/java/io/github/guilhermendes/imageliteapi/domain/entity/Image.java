@@ -32,7 +32,7 @@ public class Image {
     private ImageExtension extension;
     @Column
     @CreatedDate
-    private LocalDateTime uploadData;
+    private LocalDateTime uploadDate;
     @Column
     private String tags;
     @Column
