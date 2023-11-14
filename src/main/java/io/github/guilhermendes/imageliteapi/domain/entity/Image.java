@@ -1,6 +1,6 @@
 package io.github.guilhermendes.imageliteapi.domain.entity;
 
-import io.github.guilhermendes.imageliteapi.domian.enums.ImageExtension;
+import io.github.guilhermendes.imageliteapi.domain.enums.ImageExtension;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
