@@ -19,6 +19,17 @@ public class ImagesMapper {
                 .extension(ImageExtension.valueOf(MediaType.valueOf(file.getContentType())))
                 .file(file.getBytes())
                 .build();
+    }
+
+    public imageDTO imageDTO(Image image, String url){
+        return imageDTO.builder()
+                .url(url)
+                .extension(image.getExtension().name())
+                .name(image.getFileName())
+                .size(image.getSize())
+                .uploadDate(image.getUploadDate().toLocalDate())
+                .build();
+
 
     }
 }
