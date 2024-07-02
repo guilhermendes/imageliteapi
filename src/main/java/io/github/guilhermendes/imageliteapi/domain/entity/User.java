@@ -32,7 +32,4 @@ public class User {
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-
-
 }
