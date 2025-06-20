@@ -23,7 +23,7 @@ public interface ImageRepository extends JpaRepository<Image, String>, JpaSpecif
          }
 
          if(StringUtils.hasText(query)){
-     Specification<Image> nameLike = (root, query1, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.upper(root.get("name")), "%" + query.toLowerCase() + "%");
+             Specification<Image> nameLike = (root, query1, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.upper(root.get("name")), "%" + query.toLowerCase() + "%");
              Specification<Image> tagsLike  = (root, query1, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.upper(root.get("tags")), "%" + query.toLowerCase() + "%");
 
              Specification<Image> nameOrTagsLike = Specification.anyOf(nameLike, tagsLike);
