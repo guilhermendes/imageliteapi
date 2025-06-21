@@ -57,25 +57,25 @@ public class ImagesController {
         headers.setContentDispositionFormData("inline; filename= \"" + image.getFileName() +  "\"", image.getFileName());
         return new ResponseEntity<>(image.getFile(), headers, HttpStatus.OK);
     }
-
+    @GetMapping
     public ResponseEntity<List<ImageDTO>> search(
-            @RequestParam(value = "extension", required = false) String extension,
+            @RequestParam(value = "extension", required = false, defaultValue = "") String extension,
             @RequestParam(value = "query", required = false) String query){
 
-        var result = service.search(ImageExtension.valueOf(extension), query);
+        var result = service.search(ImageExtension.ofName(extension), query);
 
-        var imagen = result.stream().map(image -> {
+        var images = result.stream().map(image -> {
             var url = buildImageURL(image);
             return mapper.imageToDTO(image, url.toString());
         }).collect(Collectors.toList());
 
-        return ResponseEntity.ok(imagen);
-    };
+        return ResponseEntity.ok(images);
+    }
 
     private URI buildImageURL(Image image){
         String imagePath = "/" + image.getId();
-        return ServletUriComponentsBuilder.
-                fromCurrentRequest()
+        return ServletUriComponentsBuilder
+                .fromCurrentRequestUri()
                 .path(imagePath)
                 .build().toUri();
     }

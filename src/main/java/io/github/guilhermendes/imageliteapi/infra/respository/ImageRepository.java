@@ -2,6 +2,8 @@ package io.github.guilhermendes.imageliteapi.infra.respository;
 
 import io.github.guilhermendes.imageliteapi.domain.entity.Image;
 import io.github.guilhermendes.imageliteapi.domain.enums.ImageExtension;
+import io.github.guilhermendes.imageliteapi.infra.respository.spacs.GenericSpecs;
+import io.github.guilhermendes.imageliteapi.infra.respository.spacs.ImageSpacs;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Path;
 import org.springframework.data.jpa.domain.Specification;
@@ -11,26 +13,25 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+import static io.github.guilhermendes.imageliteapi.infra.respository.spacs.GenericSpecs.conjunction;
+import static io.github.guilhermendes.imageliteapi.infra.respository.spacs.ImageSpacs.*;
+import static org.springframework.data.jpa.domain.Specification.anyOf;
+import static org.springframework.data.jpa.domain.Specification.where;
+
 public interface ImageRepository extends JpaRepository<Image, String>, JpaSpecificationExecutor<Image> {
 
      default List<Image> findByExtensionAndNAmeOrTagsLike(ImageExtension extension, String query){
-         Specification<Image> conjunction = (root, q, criteriaBuilder) -> criteriaBuilder.conjunction();
-         Specification<Image> spec = Specification.where( conjunction );
+         Specification<Image> spec = where(conjunction());
 
          if(extension != null){
-             Specification<Image> extensionEqual = (root, query1, criteriaBuilderb) -> criteriaBuilderb.equal(root.get("extension"), extension);
-             spec = spec.and(extensionEqual);
+             spec = spec.and(extensionEqual(extension));
          }
 
          if(StringUtils.hasText(query)){
-             Specification<Image> nameLike = (root, query1, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.upper(root.get("name")), "%" + query.toLowerCase() + "%");
-             Specification<Image> tagsLike  = (root, query1, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.upper(root.get("tags")), "%" + query.toLowerCase() + "%");
-
-             Specification<Image> nameOrTagsLike = Specification.anyOf(nameLike, tagsLike);
-             spec = spec.and(nameOrTagsLike);
+             spec = spec.and(anyOf(nameLike(query), tagsLike(query)));
          }
 
-         return findAll();
+         return findAll(spec);
      }
 
 }

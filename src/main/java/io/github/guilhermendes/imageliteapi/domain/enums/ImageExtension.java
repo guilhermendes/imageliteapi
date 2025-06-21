@@ -1,6 +1,7 @@
 package io.github.guilhermendes.imageliteapi.domain.enums;
 
 import lombok.Getter;
+import org.hibernate.sql.ast.tree.insert.Values;
 import org.springframework.http.MediaType;
 
 import java.util.Arrays;
@@ -20,6 +21,13 @@ public enum ImageExtension {
     public static ImageExtension valueOf(MediaType mediaType){
         return Arrays.stream(values())
                 .filter(ie -> ie.mediaType.equals(mediaType))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static ImageExtension ofName(String name){
+        return Arrays.stream(values())
+                .filter(ie -> ie.name().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
     }
